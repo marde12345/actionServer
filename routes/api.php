@@ -19,10 +19,30 @@ use App\Http\Resources\InfluencerResource;
 */
 
 // Testing API
-Route::get('/', [UserController::class, 'index']);
-Route::get('/user/{id}', function ($id) {
-    return new InfluencerResource(User::findOrFail($id));
+Route::get('/user', function () {
+    return User::all();
 });
+
+Route::get('/userInf', function () {
+    return User::where('role', 'inf')->get();
+});
+
+Route::post('/userEmail', function (Request $request) {
+    return User::where('email', $request->post('email'))->first();
+});
+
+Route::post('/login', function (Request $request) {
+
+    return User::where('email', $request->email)->where('password', bcrypt($request->password))->first();
+});
+
+// Route::get('/user/{id}', function ($id) {
+//     return new InfluencerResource(User::findOrFail($id));
+// });
+
+// Route::get('/userEmail/{email}', function ($email) {
+//     return User::where('email', $email)->get();
+// });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
