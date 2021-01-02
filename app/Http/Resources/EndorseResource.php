@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Influencer;
 use App\Models\Platform;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InfluencerResource extends JsonResource
+class EndorseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +17,11 @@ class InfluencerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user' => User::find($this->id),
-            'platforms' => Platform::where('user_id', $this->id)->get()
+            'cust' => User::find($this->cust_id),
+            // 'inf' => new InfluencerResource(User::find($this->inf_id)),
+            'plat' => Platform::find($this->plat_id),
+            'begin' => $this->begin,
+            'end' => $this->end
         ];
     }
 }

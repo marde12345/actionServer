@@ -18,13 +18,23 @@ use App\Http\Resources\InfluencerResource;
 |
 */
 
+Route::get('/', function () {
+    return "Nice";
+});
 // Testing API
 Route::get('/user', function () {
     return User::all();
 });
+Route::post('/user', function (Request $request) {
+    return User::find($request->id);
+});
 
 Route::get('/userInf', function () {
-    return User::where('role', 'inf')->get();
+    return InfluencerResource::collection(User::where('role', 'inf')->get());
+});
+
+Route::post('/userInf', function (Request $request) {
+    return new InfluencerResource(User::find($request->id));
 });
 
 Route::post('/userEmail', function (Request $request) {
@@ -32,9 +42,13 @@ Route::post('/userEmail', function (Request $request) {
 });
 
 Route::post('/login', function (Request $request) {
-
     return User::where('email', $request->email)->where('password', bcrypt($request->password))->first();
 });
+
+Route::post('/platform', [PlatformController::class, 'store']);
+
+Route::post('/endorse', [EndorseController::class, 'getEndorseByInfId']);
+Route::post('/createEndorse', [EndorseController::class, 'storeEndorse']);
 
 // Route::get('/user/{id}', function ($id) {
 //     return new InfluencerResource(User::findOrFail($id));
@@ -45,6 +59,7 @@ Route::post('/login', function (Request $request) {
 // });
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/update', [AuthController::class, 'update']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
