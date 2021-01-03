@@ -47,40 +47,7 @@ Route::get('/filterTerdekat', function () {
     );
 });
 
-Route::get('/filterPopuler', function () {
-    $user_platforms = [];
-    $users = Platform::all()->groupBy("user_id", true);
-
-    $average = [];
-    foreach ($users as $user) {
-        $temp = [];
-        foreach ($user as $platform) {
-            $user_id = $platform->user_id;
-            array_push($temp, $platform->follower);
-        }
-        $average = array_sum($temp) / count($temp);
-        $data = [];
-        $data['user_id'] = $user_id;
-        $data['avg'] = $average;
-        array_push($user_platforms, $data);
-    }
-
-    // function cmp($a, $b)
-    // {
-    //     return $b['avg'] - $a['avg'];
-    // }
-
-    // usort($user_platforms, "cmp");
-    usort($user_platforms, function ($a, $b) {
-        return $b['avg'] - $a['avg'];
-    });
-
-    $ids = [];
-    foreach ($user_platforms as $user) {
-        array_push($ids, $user['user_id']);
-    }
-    return InfluencerResource::collection(User::find($ids));
-});
+Route::get('/filterPopuler', [FilterController::class, 'filterPopuler']);
 
 Route::get('/filterInstagram', function () {
     $users = Platform::where('platform', 'instagram')->get();
@@ -108,13 +75,6 @@ Route::post('/platform', [PlatformController::class, 'store']);
 Route::post('/endorse', [EndorseController::class, 'getEndorseByInfId']);
 Route::post('/createEndorse', [EndorseController::class, 'storeEndorse']);
 
-// Route::get('/user/{id}', function ($id) {
-//     return new InfluencerResource(User::findOrFail($id));
-// });
-
-// Route::get('/userEmail/{email}', function ($email) {
-//     return User::where('email', $email)->get();
-// });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/registerInf', [AuthController::class, 'registerInf']);
