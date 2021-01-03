@@ -32,7 +32,7 @@ Route::post('/user', function (Request $request) {
 });
 
 Route::get('/userInf', function () {
-    return InfluencerResource::collection(User::where('role', 'inf')->limit(3)->get());
+    return InfluencerResource::collection(User::inRandomOrder()->where('role', 'inf')->limit(5)->get());
 });
 
 Route::get('/filterTrending', function () {
