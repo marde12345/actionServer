@@ -117,6 +117,7 @@ Route::post('/createEndorse', [EndorseController::class, 'storeEndorse']);
 // });
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/registerInf', [AuthController::class, 'registerInf']);
 Route::post('/update', [AuthController::class, 'update']);
 Route::post('/login', [AuthController::class, 'login']);
 

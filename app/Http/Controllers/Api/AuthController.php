@@ -26,6 +26,28 @@ class AuthController extends Controller
         return response(['user' => $user, 'access_token' => $accessToken]);
     }
 
+    public function registerInf(Request $request)
+    {
+        // name, email, role, password, wa, deskripsi, photo_profile, location
+        $validatedData = $request->validate([
+            'name' => 'required|max:55',
+            'email' => 'email|required|unique:users',
+        ]);
+
+        $validatedData['password'] = bcrypt("123456");
+        $validatedData['role'] = "inf";
+        $validatedData['photo_profile'] = $request->photo_profile;
+        $validatedData['wa'] = $request->wa;
+        $validatedData['deskripsi'] = $request->deskripsi;
+        $validatedData['location'] = $request->location;
+
+        $user = User::create($validatedData);
+
+        $accessToken = $user->createToken('authToken')->accessToken;
+
+        return response(['user' => $user, 'access_token' => $accessToken]);
+    }
+
     public function update(Request $request)
     {
         $user = User::where('email', $request->email)->first();
