@@ -32,7 +32,15 @@ Route::post('/user', function (Request $request) {
 });
 
 Route::get('/userInf', function () {
+    return InfluencerResource::collection(User::where('role', 'inf')->limit(3)->get());
+});
+
+Route::get('/filterTrending', function () {
     return InfluencerResource::collection(User::where('role', 'inf')->get());
+});
+
+Route::get('/filterTerdekat', function () {
+    return InfluencerResource::collection(User::where('location', 'Surabaya')->get());
 });
 
 Route::get('/filterInstagram', function () {
