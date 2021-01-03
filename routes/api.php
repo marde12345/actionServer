@@ -65,12 +65,15 @@ Route::get('/filterPopuler', function () {
         array_push($user_platforms, $data);
     }
 
-    function cmp($a, $b)
-    {
-        return $b['avg'] - $a['avg'];
-    }
+    // function cmp($a, $b)
+    // {
+    //     return $b['avg'] - $a['avg'];
+    // }
 
-    usort($user_platforms, "cmp");
+    // usort($user_platforms, "cmp");
+    usort($user_platforms, function ($a, $b) {
+        return $b['avg'] - $a['avg'];
+    });
 
     $ids = [];
     foreach ($user_platforms as $user) {
