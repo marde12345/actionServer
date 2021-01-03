@@ -40,7 +40,43 @@ Route::get('/filterTrending', function () {
 });
 
 Route::get('/filterTerdekat', function () {
-    return InfluencerResource::collection(User::where('location', 'Surabaya')->get());
+    return InfluencerResource::collection(
+        User::where('location', 'Surabaya')
+            ->where('role', 'inf')
+            ->get()
+    );
+});
+
+Route::get('/filterPopuler', function () {
+    $user_platforms = [];
+    $users = Platform::all()->groupBy("user_id", true);
+
+    $average = [];
+    foreach ($users as $user) {
+        $temp = [];
+        foreach ($user as $platform) {
+            $user_id = $platform->user_id;
+            array_push($temp, $platform->follower);
+        }
+        $average = array_sum($temp) / count($temp);
+        $data = [];
+        $data['user_id'] = $user_id;
+        $data['avg'] = $average;
+        array_push($user_platforms, $data);
+    }
+
+    function cmp($a, $b)
+    {
+        return $b['avg'] - $a['avg'];
+    }
+
+    usort($user_platforms, "cmp");
+
+    $ids = [];
+    foreach ($user_platforms as $user) {
+        array_push($ids, $user['user_id']);
+    }
+    return InfluencerResource::collection(User::find($ids));
 });
 
 Route::get('/filterInstagram', function () {
