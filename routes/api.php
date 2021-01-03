@@ -17,7 +17,7 @@ use App\Http\Resources\InfluencerResource;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-// idk why lagi hayolo
+// idk why lagi hayolo asdasd
 Route::get('/', function () {
     return "Nice";
 });
