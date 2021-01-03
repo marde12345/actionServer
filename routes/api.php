@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Http\Resources\InfluencerResource;
+use App\Models\Endorse;
+use App\Models\Platform;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,15 @@ Route::post('/user', function (Request $request) {
 
 Route::get('/userInf', function () {
     return InfluencerResource::collection(User::where('role', 'inf')->get());
+});
+
+Route::get('/filterInstagram', function () {
+    $users = Platform::where('platform', 'instagram')->get();
+    $ids = [];
+    foreach ($users as $user) {
+        array_push($ids, $user->user_id);
+    }
+    return InfluencerResource::collection(User::find($ids));
 });
 
 Route::post('/userInf', function (Request $request) {
