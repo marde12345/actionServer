@@ -48,9 +48,9 @@ Route::get('/getFilterKota', function () {
     return $kota;
 });
 
-Route::get('/filterTerdekat', function () {
+Route::post('/filterTerdekat', function (Request $request) {
     return InfluencerResource::collection(
-        User::where('location', 'Surabaya')
+        User::where('location', $request->location)
             ->where('role', 'inf')
             ->get()
     );
