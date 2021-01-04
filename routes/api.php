@@ -39,6 +39,15 @@ Route::get('/filterTrending', function () {
     return InfluencerResource::collection(User::where('role', 'inf')->get());
 });
 
+Route::get('/getFilterKota', function () {
+    $location = User::select("location")->where('role', 'inf')->groupBy("location")->get();
+    $kota = [];
+    foreach ($location as $loc) {
+        array_push($kota, $loc->location);
+    }
+    return $kota;
+});
+
 Route::get('/filterTerdekat', function () {
     return InfluencerResource::collection(
         User::where('location', 'Surabaya')
